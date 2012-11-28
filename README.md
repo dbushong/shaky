@@ -8,3 +8,5 @@ https://moe-js.googlecode.com/git/talks/jsconfeu2012/tools/shaky/shaky.html
 This turned out to not be a terribly interesting study in the differences
 between Dart and CoffeeScript, but I wanted to understand how the code worked,
 so why not!
+
+Try it out here: http://shaky.github.bushong.net/
