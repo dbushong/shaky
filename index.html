@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript">
+      WebFontConfig = {
+        google: { families: [ 'Gloria Hallelujah' ] },
+        active: function () {
+          FONTS_ACTIVE = true;
+          if (typeof drawDiagram === 'function') drawDiagram();
+        }
+      };
+      (function() {
+        var wf = document.createElement('script');
+        wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+        wf.type = 'text/javascript';
+        wf.async = 'true';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(wf, s);
+      })();
+    </script>
+
+    <link rel="stylesheet" href="shaky.css">
+  </head>
+  <body>
+    <button id="save">save as</button><input type="text" id="name" value="image.png"/><br/>
+    <textarea id="textarea" style="font-family: monospace;" cols="60" rows="45">
+       +------------+     +------------+
+       |            |     |            |
+       |  CONTEXT   |&lt;-+  |  CONTEXT   |&lt;-+
+       |            |  |  |            |  |
+       +------------+  |  +------------+  |
+                       |                  |
+       +------------+  |  +------------+  |
+       |    getY    |  |  |    getY    |  |
+       |            |  |  |            |  |
+       |     *------+--+  |     *------+--+
+       |            |  |  |            |  |
+       +------------+  |  +------------+  |
+                       |                  |
+       +------------+  |  +------------+  |
+       |    getX    |  |  |    getX    |  |
+       |            |  |  |            |  |
+       |     *------+--+  |     *------+--+
+       |            |  |  |            |  |
+       +------------+  |  +------------+  |
+                       |                  |
+       +------------+  |  +------------+  |
+       |   getSum   |  |  |   getSum   |  |
+       |            |  |  |            |  |
+       |     *------+--+  |     *------+--+
+       |     *      |     |     *      |
+       +-----+------+     +-----+------+
+             |                  |
+             +----------+-------+
+                        |
+                        v
+             +--------------------+
+             |  SharedFunctionInfo|
+             |          *         |
+             +----------+---------+
+                        |
+                        v
+             +--------------------+
+             |  unoptimized Code  |
+             |                    |
+      ??? &lt;--+---* getX call      |
+             |                    |
+      ??? &lt;--+---* getY call      |
+             |                    |
+             +--------------------+
+    </textarea>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    
+    <script type="text/coffeescript" src="shaky.coffee"></script>
+    <script src="http://coffeescript.org/extras/coffee-script.js"></script>
+  </body>
+</html>
