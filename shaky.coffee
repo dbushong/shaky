@@ -118,8 +118,8 @@ class ShakyCanvas
   beginPath: -> @ctx.beginPath()
   stroke: -> @ctx.stroke()
   
-  # set strokeStyle(val) { ctx.strokeStyle = val; } -- unused?
-  # set fillStyle(val) { ctx.fillStyle = val; }     -- unused?
+  setStrokeStyle: (val) -> @ctx.strokeStyle = val
+  setFillStyle: (val) -> @ctx.fillStyle = val
   
   fillText: (args...) -> @ctx.fillText args...
 
@@ -145,8 +145,8 @@ class Line
   constructor: (@x0, @y0, @start, @x1, @y1, @end, @color) ->
 
   draw: (ctx) ->
-    ctx.strokeStyle = @color
-    ctx.fillStyle = @color
+    ctx.setStrokeStyle @color
+    ctx.setFillStyle @color
     ctx.beginPath()
     ctx.moveTo X(@x0), Y(@y0)
     ctx.lineTo X(@x1), Y(@y1)
@@ -165,7 +165,7 @@ class Text
   constructor: (@x0, @y0, @text, @color) ->
   
   draw: (ctx) ->
-    ctx.fillStyle = @color
+    ctx.setFillStyle @color
     ctx.fillText @text, X(@x0), Y(@y0)
 
 # Parses given ASCII art string into a list of figures.
@@ -316,30 +316,32 @@ parseASCIIArt = (string) ->
   # as text objects.
   extractText = ->
     for y in [0...height]
-      for x in [0...width]
-        continue if data[y][x] is ' '
-
-        # Find the end of the text annotation by searching for a space.
-        start = end = x
-        while end < width and data[y][end] isnt ' '
-          end++
-
-        text = data[y][start...end].join ''
-
-        # Check if it can be concatenated with a previously found text annotation.
-        prev = figures[figures.length - 1]
-        if prev.constructor.name is 'Text' and
-             prev.x0 + prev.text.length + 1 is start
-          # If they touch concatentate them.
-          prev.text = "#{prev.text} #{text}"
+      x = 0
+      while x < width
+        if data[y][x] is ' '
+          x++
         else
-          # Look for a grey color modifiers.
-          color = 'black'
-          if text[0] is '\\' and text[text.length - 1] is '\\'
-            text = text[1..]
-            color = '#666'
-          figures.push new Text(x, y, text, color)
-        x = end
+          # Find the end of the text annotation by searching for a space.
+          start = end = x
+          while end < width and data[y][end] isnt ' '
+            end++
+
+          text = data[y][start...end].join ''
+
+          # Check if it can be concatenated with a previously found text annotation.
+          prev = figures[figures.length - 1]
+          if prev.constructor.name is 'Text' and
+              prev.x0 + prev.text.length + 1 is start
+            # If they touch concatentate them.
+            prev.text = "#{prev.text} #{text}"
+          else
+            # Look for a grey color modifiers.
+            color = 'black'
+            if text[0] is '\\' and text[text.length - 1] is '\\'
+              text = text.substring 1, text.length-1
+              color = '#666'
+            figures.push new Text(x, y, text, color)
+          x = end
 
   while extractLine() then # Extract all lines.
   extractText()  # Extract all text.
