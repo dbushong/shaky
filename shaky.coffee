@@ -1,3 +1,5 @@
+# CoffeeScript port by David Bushong <david@bushong.net>
+#
 # Copyright 2012 Google Inc. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -352,7 +354,7 @@ doc = document
 $ = (id) -> doc.getElementById id
 
 # Draw a diagram from the ascii art contained in the #textarea.
-drawDiagram = ->
+window.drawDiagram = ->
   figures = parseASCIIArt $('textarea').value
 
   # Compute required canvas size.
@@ -371,30 +373,21 @@ drawDiagram = ->
   ctx = new ShakyCanvas canvas
   figure.draw(ctx) for figure in figures
 
-main = ->
-  textarea = $('textarea')
-  textarea.addEventListener 'change', drawDiagram
-  textarea.addEventListener 'keyup',  drawDiagram
-  
-  $('save').addEventListener 'click', ->
-    a = doc.createElement 'a'
-    a.href = $('canvas').toDataURL('image/png')
-    a.download = $('name').value
-    doc.body.appendChild a
-    setTimeout (-> doc.body.removeChild a), 1000
-    try
-      a.click()
-    catch e
-      alert "couldn't click"
-      #a.$dom_dispatchEvent(new html.Event("click"));
+# start main code
+textarea = $('textarea')
+textarea.addEventListener 'change', drawDiagram
+textarea.addEventListener 'keyup',  drawDiagram
 
-  #js.scoped(() {
-  #  try {
-  #    if (js.context.window.FONTS_ACTIVE) return;
-  #  } catch (e) { }
-  #  js.context.drawDiagram = new js.Callback.once((x) => drawDiagram);
-  #});
+$('save').addEventListener 'click', ->
+  a = doc.createElement 'a'
+  a.href = $('canvas').toDataURL('image/png')
+  a.download = $('name').value
+  doc.body.appendChild a
+  setTimeout (-> doc.body.removeChild a), 1000
+  try
+    a.click()
+  catch e
+    alert "couldn't click"
+    #a.$dom_dispatchEvent(new html.Event("click"));
 
-  drawDiagram()
-
-main()
+drawDiagram() if FONTS_ACTIVE?
