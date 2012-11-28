@@ -332,7 +332,7 @@ parseASCIIArt = (string) ->
 
           # Check if it can be concatenated with a previously found text annotation.
           prev = figures[figures.length - 1]
-          if prev.constructor.name is 'Text' and
+          if prev?.constructor.name is 'Text' and
               prev.x0 + prev.text.length + 1 is start
             # If they touch concatentate them.
             prev.text = "#{prev.text} #{text}"
