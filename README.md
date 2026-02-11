@@ -1,7 +1,7 @@
 CoffeeScript port of awesome shaky box-and-lines ASCII art diagramming
 thing-a-ma-jiggy from:
 
-https://moe-js.googlecode.com/git/talks/jsconfeu2012/tools/shaky/shaky.html
+[https://moe-js.googlecode.com/git/talks/jsconfeu2012/tools/shaky/shaky.html](https://web.archive.org/web/20130607065639/https://moe-js.googlecode.com/git/talks/jsconfeu2012/tools/shaky/shaky.html)
 
 (Code was originally in Dart)
 
